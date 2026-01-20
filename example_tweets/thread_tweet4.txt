@@ -1,0 +1,11 @@
+The old argument is dead.
+
+"AI just copies from training data."
+
+"It's fancy pattern matching."
+
+"It can't really think."
+
+This algorithm didn't exist anywhere.
+
+AI created it.

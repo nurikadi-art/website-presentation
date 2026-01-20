@@ -1,0 +1,9 @@
+Google's AI created a new algorithm for matrix multiplication.
+
+14% more efficient than anything humans built.
+
+For context:
+
+Researchers spent decades celebrating 2-3% gains.
+
+AI did 14% in minutes.

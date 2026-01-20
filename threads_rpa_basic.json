@@ -1,0 +1,606 @@
+[
+  {
+    "type": "importText",
+    "config": {
+      "path": "C:\\Users\\Nursultan\\Downloads\\thread_tweet1.txt",
+      "variable": "tweet_1",
+      "remark": "Load tweet 1"
+    }
+  },
+  {
+    "type": "importText",
+    "config": {
+      "path": "C:\\Users\\Nursultan\\Downloads\\thread_tweet2.txt",
+      "variable": "tweet_2",
+      "remark": "Load tweet 2"
+    }
+  },
+  {
+    "type": "importText",
+    "config": {
+      "path": "C:\\Users\\Nursultan\\Downloads\\thread_tweet3.txt",
+      "variable": "tweet_3",
+      "remark": "Load tweet 3"
+    }
+  },
+  {
+    "type": "importText",
+    "config": {
+      "path": "C:\\Users\\Nursultan\\Downloads\\thread_tweet4.txt",
+      "variable": "tweet_4",
+      "remark": "Load tweet 4"
+    }
+  },
+  {
+    "type": "importText",
+    "config": {
+      "path": "C:\\Users\\Nursultan\\Downloads\\thread_tweet5.txt",
+      "variable": "tweet_5",
+      "remark": "Load tweet 5"
+    }
+  },
+  {
+    "type": "gotoUrl",
+    "config": {
+      "url": "https://www.threads.net",
+      "timeout": 30000,
+      "remark": "Go to Threads homepage"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 4000,
+      "timeoutMin": 3000,
+      "timeoutMax": 5000,
+      "remark": "Wait for page"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "bottom",
+      "distance": 300,
+      "remark": "Scroll down (human behavior)"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 3000,
+      "remark": "Reading pause"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "top",
+      "distance": 200,
+      "remark": "Scroll back up"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "gotoUrl",
+    "config": {
+      "url": "https://www.threads.net/intent/post",
+      "timeout": 30000,
+      "remark": "Open composer"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 4000,
+      "timeoutMin": 3000,
+      "timeoutMax": 5000,
+      "remark": "Wait for composer"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Hover editor"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 800,
+      "timeoutMin": 500,
+      "timeoutMax": 1200,
+      "remark": "Hover pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click editor"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 600,
+      "timeoutMin": 400,
+      "timeoutMax": 800,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "content": "${tweet_1}",
+      "intervals": 85,
+      "isRandom": "1",
+      "remark": "Type tweet 1"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2500,
+      "timeoutMin": 2000,
+      "timeoutMax": 3500,
+      "remark": "Pause after typing"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "bottom",
+      "distance": 100,
+      "remark": "Small scroll"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1000,
+      "timeoutMin": 800,
+      "timeoutMax": 1500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Hover Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 600,
+      "timeoutMin": 400,
+      "timeoutMax": 900,
+      "remark": "Hover pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1200,
+      "timeoutMax": 2000,
+      "remark": "Wait for new editor"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 2,
+      "remark": "Hover editor 2"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 500,
+      "timeoutMin": 300,
+      "timeoutMax": 700,
+      "remark": "Hover pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 2,
+      "remark": "Click editor 2"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 2,
+      "content": "${tweet_2}",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Type tweet 2"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2500,
+      "timeoutMin": 2000,
+      "timeoutMax": 3500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "bottom",
+      "distance": 150,
+      "remark": "Scroll"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Hover Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 500,
+      "timeoutMin": 300,
+      "timeoutMax": 800,
+      "remark": "Hover pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1200,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 3,
+      "remark": "Click editor 3"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 3,
+      "content": "${tweet_3}",
+      "intervals": 75,
+      "isRandom": "1",
+      "remark": "Type tweet 3"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Hover"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 4,
+      "remark": "Click editor 4"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 4,
+      "content": "${tweet_4}",
+      "intervals": 82,
+      "isRandom": "1",
+      "remark": "Type tweet 4"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2200,
+      "timeoutMin": 1800,
+      "timeoutMax": 2800,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "bottom",
+      "distance": 120,
+      "remark": "Scroll"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Hover"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 600,
+      "timeoutMin": 400,
+      "timeoutMax": 900,
+      "remark": "Hover pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1200,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 5,
+      "remark": "Click editor 5"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 5,
+      "content": "${tweet_5}",
+      "intervals": 78,
+      "isRandom": "1",
+      "remark": "Type tweet 5"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 3500,
+      "timeoutMin": 3000,
+      "timeoutMax": 4500,
+      "remark": "Review pause"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "top",
+      "distance": 200,
+      "remark": "Scroll up to review"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Review"
+    }
+  },
+  {
+    "type": "scroll",
+    "config": {
+      "scrollType": "smooth",
+      "position": "bottom",
+      "distance": 300,
+      "remark": "Scroll to Post button"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "hover",
+    "config": {
+      "selector": "div[role='button']",
+      "selectorType": "selector",
+      "text": "Post",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Hover Post button"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1200,
+      "timeoutMin": 800,
+      "timeoutMax": 1800,
+      "remark": "Hesitation"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[role='button']",
+      "selectorType": "selector",
+      "text": "Post",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click Post"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 6000,
+      "timeoutMin": 5000,
+      "timeoutMax": 8000,
+      "remark": "Wait for post"
+    }
+  }
+]
