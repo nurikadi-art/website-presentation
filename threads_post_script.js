@@ -1,133 +1,78 @@
 const { chromium } = require('playwright-extra');
 const stealth = require('puppeteer-extra-plugin-stealth')();
+const fs = require('fs');
+const path = require('path');
 
-// Apply stealth plugin (works with playwright-extra)
+// Apply stealth plugin
 chromium.use(stealth);
 
-// Thread content with proper line breaks
-const tweets = [
-  `Elon Musk just sued OpenAI for $134 billion.
+// ============================================
+// CONFIGURATION
+// ============================================
 
-Everyone's calling him a sore loser.
+const CONFIG = {
+  threadsDir: path.join(__dirname, 'threads'),        // Pending threads
+  postedDir: path.join(__dirname, 'threads_posted'),  // Completed threads
+  failedDir: path.join(__dirname, 'threads_failed'),  // Failed threads
+  separator: '---',                                    // Tweet separator in files
+};
 
-They're missing the real lesson.
+// ============================================
+// THREAD FILE MANAGEMENT
+// ============================================
 
-Here's why this case should terrify every founder:`,
+function ensureDirectories() {
+  [CONFIG.threadsDir, CONFIG.postedDir, CONFIG.failedDir].forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`📁 Created directory: ${dir}`);
+    }
+  });
+}
 
-  `In 2015, OpenAI launched as a non-profit.
+function loadThreadFromFile(filePath) {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const tweets = content
+    .split(CONFIG.separator)
+    .map(tweet => tweet.trim())
+    .filter(tweet => tweet.length > 0);
 
-Elon gave them $38 million.
+  if (tweets.length === 0) {
+    throw new Error(`No tweets found in file: ${filePath}`);
+  }
 
-He got a board seat in return.
+  return tweets;
+}
 
-Seemed like a fair deal.
+function getPendingThreads() {
+  if (!fs.existsSync(CONFIG.threadsDir)) {
+    return [];
+  }
 
-It wasn't.`,
+  return fs.readdirSync(CONFIG.threadsDir)
+    .filter(file => file.endsWith('.txt'))
+    .sort() // Alphabetical order (use 001_, 002_ prefix for custom order)
+    .map(file => ({
+      name: file,
+      path: path.join(CONFIG.threadsDir, file)
+    }));
+}
 
-  `By 2018, Elon saw the potential.
+function markThreadAsPosted(threadFile) {
+  const destPath = path.join(CONFIG.postedDir, `${Date.now()}_${threadFile.name}`);
+  fs.renameSync(threadFile.path, destPath);
+  console.log(`✅ Moved to posted: ${destPath}`);
+}
 
-He offered MORE money for control.
+function markThreadAsFailed(threadFile, error) {
+  const destPath = path.join(CONFIG.failedDir, `${Date.now()}_${threadFile.name}`);
+  fs.renameSync(threadFile.path, destPath);
 
-The board said no.
-
-He quit.
-
-Then they made billions without him.`,
-
-  `OpenAI flipped to for-profit in 2019.
-
-Microsoft poured in billions.
-
-ChatGPT exploded.
-
-The company hit $80 billion in value.
-
-Elon's $38 million got him nothing.`,
-
-  `The common enemy here isn't Elon or Sam Altman.
-
-It's the lie founders believe:
-
-"We share the same mission. We don't need formal terms."
-
-That lie destroys companies every day.`,
-
-  `Here's what actually protects you:
-
-Anti-dilution clauses in your equity agreements
-
-Voting control provisions (not just board seats)
-
-Exit terms written BEFORE you contribute value
-
-Board seats alone are theater.`,
-
-  `The pattern that kills founders:
-
-You give value early (money, time, ideas)
-
-You get vague promises of "influence"
-
-Big money shows up
-
-Structure changes
-
-You're pushed out
-
-This happens at every level.`,
-
-  `Here's the move:
-
-Lock your terms BEFORE you transfer value.
-
-Not after trust builds.
-
-Not when "the time feels right."
-
-Before.
-
-That's when you have leverage.`,
-
-  `What to demand in writing:
-
-Capital → equity with control provisions
-
-Expertise → consulting agreement with equity tied to results
-
-Introductions → finder's fees or success-based equity
-
-IP → license agreements or founder shares
-
-Handshakes mean nothing.`,
-
-  `Will Elon win $134 billion?
-
-Probably not.
-
-But should he have locked better terms in 2015?
-
-Absolutely.
-
-Structure isn't cynicism.
-
-It's respect for how money changes people.`,
-
-  `The lesson:
-
-Mission evaporates when billions appear.
-
-Every. Single. Time.
-
-Protect yourself on paper.
-
-Or watch others get rich on your early work.
-
-How much will your version of this lesson cost?`,
-
-  `Want more insights like this?
-
-Follow me on IG @nurikadi for growth tips.`
-];
+  // Save error log
+  const errorLog = path.join(CONFIG.failedDir, `${Date.now()}_${threadFile.name}.error.txt`);
+  fs.writeFileSync(errorLog, `Error: ${error.message}\n\nStack:\n${error.stack}`);
+  console.log(`❌ Moved to failed: ${destPath}`);
+}
 
 // ============================================
 // HUMAN BEHAVIOR SIMULATION (LinkedHelper-style)
@@ -140,7 +85,6 @@ class HumanBehavior {
     this.lastMouseY = 0;
   }
 
-  // Random delay with gaussian distribution (more natural than uniform)
   gaussianRandom(mean, stdDev) {
     let u1 = Math.random();
     let u2 = Math.random();
@@ -148,20 +92,18 @@ class HumanBehavior {
     return Math.max(0, mean + stdDev * randStdNormal);
   }
 
-  // Human-like delay ranges
   delay(type = 'normal') {
     const delays = {
-      micro: () => this.gaussianRandom(50, 20),      // Tiny pauses
-      short: () => this.gaussianRandom(200, 80),     // Quick actions
-      normal: () => this.gaussianRandom(500, 150),   // Normal actions
-      thinking: () => this.gaussianRandom(1500, 500), // Reading/thinking
-      long: () => this.gaussianRandom(3000, 800),    // Long pauses
-      typing: () => this.gaussianRandom(80, 30),     // Between keystrokes
+      micro: () => this.gaussianRandom(50, 20),
+      short: () => this.gaussianRandom(200, 80),
+      normal: () => this.gaussianRandom(500, 150),
+      thinking: () => this.gaussianRandom(1500, 500),
+      long: () => this.gaussianRandom(3000, 800),
+      typing: () => this.gaussianRandom(80, 30),
     };
     return Math.floor(delays[type]?.() || delays.normal());
   }
 
-  // Bezier curve for natural mouse movement
   bezierCurve(t, p0, p1, p2, p3) {
     const cX = 3 * (p1.x - p0.x);
     const bX = 3 * (p2.x - p1.x) - cX;
@@ -177,12 +119,10 @@ class HumanBehavior {
     return { x, y };
   }
 
-  // Generate human-like mouse path with curves and slight randomness
   generateMousePath(startX, startY, endX, endY) {
     const points = [];
     const steps = Math.floor(this.gaussianRandom(25, 10));
 
-    // Control points for bezier curve (add randomness)
     const cp1 = {
       x: startX + (endX - startX) * 0.25 + (Math.random() - 0.5) * 100,
       y: startY + (endY - startY) * 0.25 + (Math.random() - 0.5) * 100
@@ -194,25 +134,15 @@ class HumanBehavior {
 
     for (let i = 0; i <= steps; i++) {
       const t = i / steps;
-      const point = this.bezierCurve(
-        t,
-        { x: startX, y: startY },
-        cp1,
-        cp2,
-        { x: endX, y: endY }
-      );
-
-      // Add micro-jitter (hand tremor simulation)
+      const point = this.bezierCurve(t, { x: startX, y: startY }, cp1, cp2, { x: endX, y: endY });
       point.x += (Math.random() - 0.5) * 2;
       point.y += (Math.random() - 0.5) * 2;
-
       points.push(point);
     }
 
     return points;
   }
 
-  // Move mouse naturally along a path
   async moveMouse(x, y) {
     const path = this.generateMousePath(this.lastMouseX, this.lastMouseY, x, y);
 
@@ -225,61 +155,24 @@ class HumanBehavior {
     this.lastMouseY = y;
   }
 
-  // Human-like click with movement
-  async humanClick(selector, options = {}) {
+  async humanClick(selector) {
     const element = await this.page.waitForSelector(selector, { timeout: 10000 });
     const box = await element.boundingBox();
 
     if (!box) throw new Error(`Element not visible: ${selector}`);
 
-    // Click at random point within element (not center)
     const clickX = box.x + box.width * (0.3 + Math.random() * 0.4);
     const clickY = box.y + box.height * (0.3 + Math.random() * 0.4);
 
-    // Move to element naturally
     await this.moveMouse(clickX, clickY);
-
-    // Small pause before clicking (human hesitation)
     await this.page.waitForTimeout(this.delay('short'));
 
-    // Sometimes hover briefly before clicking
     if (Math.random() < 0.3) {
       await this.page.waitForTimeout(this.delay('short'));
     }
 
-    // Click with slight position variation
-    await this.page.mouse.click(clickX, clickY, {
-      delay: this.delay('micro'), // Hold duration
-      ...options
-    });
-
+    await this.page.mouse.click(clickX, clickY, { delay: this.delay('micro') });
     await this.page.waitForTimeout(this.delay('short'));
-  }
-
-  // Click element by finding it with text content
-  async clickByText(text, tagSelector = '*') {
-    // First scroll element into view if needed
-    const element = await this.page.evaluateHandle((params) => {
-      const { text, tagSelector } = params;
-      const elements = Array.from(document.querySelectorAll(tagSelector));
-      return elements.find(el => el.textContent.trim() === text || el.innerText.trim() === text);
-    }, { text, tagSelector });
-
-    if (!element) {
-      throw new Error(`Element with text "${text}" not found`);
-    }
-
-    const box = await element.boundingBox();
-    if (!box) {
-      // Try to scroll into view
-      await element.evaluate(el => el.scrollIntoView({ behavior: 'smooth', block: 'center' }));
-      await this.page.waitForTimeout(this.delay('normal'));
-      const newBox = await element.boundingBox();
-      if (!newBox) throw new Error(`Element with text "${text}" not visible`);
-      return this.clickAtBox(newBox);
-    }
-
-    return this.clickAtBox(box);
   }
 
   async clickAtBox(box) {
@@ -292,34 +185,15 @@ class HumanBehavior {
     await this.page.waitForTimeout(this.delay('short'));
   }
 
-  // Human-like typing with mistakes and corrections
-  async humanType(text, makeTypos = true) {
-    const typoChars = 'qwertyuiopasdfghjklzxcvbnm';
-
+  async humanType(text) {
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
-
-      // Occasionally make typo and correct (5% chance)
-      if (makeTypos && Math.random() < 0.05 && char.match(/[a-zA-Z]/)) {
-        const typo = typoChars[Math.floor(Math.random() * typoChars.length)];
-        await this.page.keyboard.type(typo);
-        await this.page.waitForTimeout(this.delay('typing') * 3); // Notice mistake
-        await this.page.keyboard.press('Backspace');
-        await this.page.waitForTimeout(this.delay('typing'));
-      }
-
-      // Type the character
       await this.page.keyboard.type(char);
 
-      // Variable delay between keystrokes
       let delay = this.delay('typing');
-
-      // Longer pause after punctuation
       if ('.!?,;:'.includes(char)) {
         delay += this.delay('short');
       }
-
-      // Occasional "thinking" pause mid-sentence
       if (Math.random() < 0.02) {
         delay += this.delay('thinking');
       }
@@ -328,7 +202,6 @@ class HumanBehavior {
     }
   }
 
-  // Type text with line breaks naturally
   async typeWithLineBreaks(text) {
     const lines = text.split('\n');
 
@@ -339,7 +212,7 @@ class HumanBehavior {
         await this.page.keyboard.press('Enter');
         await this.page.waitForTimeout(this.delay('micro'));
       } else {
-        await this.humanType(line, false); // No typos for prepared content
+        await this.humanType(line);
 
         if (i < lines.length - 1) {
           await this.page.keyboard.press('Enter');
@@ -349,11 +222,8 @@ class HumanBehavior {
     }
   }
 
-  // Random scroll to simulate reading/browsing
   async randomScroll() {
     const scrollAmount = Math.floor(this.gaussianRandom(200, 100)) * (Math.random() < 0.5 ? 1 : -1);
-
-    // Smooth scroll simulation
     const steps = Math.abs(Math.floor(scrollAmount / 20));
     const direction = scrollAmount > 0 ? 1 : -1;
 
@@ -365,19 +235,6 @@ class HumanBehavior {
     await this.page.waitForTimeout(this.delay('short'));
   }
 
-  // Scroll to element naturally
-  async scrollToElement(selector) {
-    const element = await this.page.$(selector);
-    if (!element) return;
-
-    await element.evaluate(el => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-
-    await this.page.waitForTimeout(this.delay('normal'));
-  }
-
-  // Random mouse movement (idle behavior)
   async idleMovement() {
     const viewport = await this.page.viewportSize();
     const targetX = Math.random() * (viewport?.width || 1200);
@@ -387,116 +244,70 @@ class HumanBehavior {
     await this.page.waitForTimeout(this.delay('short'));
   }
 
-  // Simulate reading behavior
   async simulateReading(duration = 3000) {
     const endTime = Date.now() + duration;
 
     while (Date.now() < endTime) {
-      if (Math.random() < 0.3) {
-        await this.idleMovement();
-      }
-      if (Math.random() < 0.2) {
-        await this.randomScroll();
-      }
+      if (Math.random() < 0.3) await this.idleMovement();
+      if (Math.random() < 0.2) await this.randomScroll();
       await this.page.waitForTimeout(this.delay('normal'));
     }
   }
 }
 
 // ============================================
-// MAIN POSTING LOGIC
+// POSTING LOGIC
 // ============================================
 
-async function postThread(wsEndpoint, shouldPost = false) {
-  console.log('🔗 Connecting to browser...');
+async function postSingleThread(page, human, tweets, threadName) {
+  console.log(`\n📝 Posting thread: ${threadName}`);
+  console.log(`📊 Tweets in thread: ${tweets.length}`);
 
-  // Connect to existing AdsPower browser with stealth
-  const browser = await chromium.connectOverCDP(wsEndpoint);
-  const contexts = browser.contexts();
-  const context = contexts[0];
-  const pages = context.pages();
-
-  let page = pages.find(p => p.url().includes('threads.net')) || pages[0];
-
-  // Initialize human behavior simulator
-  const human = new HumanBehavior(page);
-
-  console.log('✅ Connected to browser');
-
-  // Step 1: Navigate to compose with human-like behavior
+  // Navigate to compose
   console.log('📝 Opening composer...');
   await page.goto('https://www.threads.net/intent/post', { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(human.delay('long'));
-
-  // Simulate looking at the page
   await human.simulateReading(2000);
 
-  // Step 2: Wait for the editor
+  // Wait for editor
   console.log('⏳ Waiting for editor...');
   await page.waitForSelector('div[contenteditable="true"][data-lexical-editor="true"]', { timeout: 15000 });
 
-  // Dismiss any dialogs with human-like clicking
+  // Dismiss dialogs
   const dismissed = await page.evaluate(() => {
     const notNow = Array.from(document.querySelectorAll('span, button')).find(el =>
       el.textContent.includes('Not now') || el.textContent.includes('Not Now')
     );
-    if (notNow) {
-      return true;
-    }
-    return false;
+    return notNow ? true : false;
   });
 
   if (dismissed) {
     try {
-      await human.clickByText('Not now');
-    } catch {
-      try {
-        await human.clickByText('Not Now');
-      } catch {
-        // Ignore if not found
+      const btn = await page.$('span:has-text("Not now"), button:has-text("Not now")');
+      if (btn) {
+        const box = await btn.boundingBox();
+        if (box) await human.clickAtBox(box);
       }
-    }
+    } catch { /* ignore */ }
     await page.waitForTimeout(human.delay('normal'));
   }
 
-  // Random scroll before starting
   await human.randomScroll();
-  await page.waitForTimeout(human.delay('short'));
 
-  // Step 3: Type the first tweet
+  // Type first tweet
   console.log(`\n📝 Tweet 1/${tweets.length}: Typing...`);
-
-  // Click on editor naturally
   await human.humanClick('div[contenteditable="true"][data-lexical-editor="true"]');
   await page.waitForTimeout(human.delay('short'));
-
-  // Type with human behavior
   await human.typeWithLineBreaks(tweets[0]);
   await page.waitForTimeout(human.delay('thinking'));
-
-  // Simulate reviewing what was typed
   await human.idleMovement();
-
   console.log(`✅ Tweet 1/${tweets.length}: Done`);
 
-  // Step 4: Add remaining tweets as thread
+  // Add remaining tweets
   for (let i = 1; i < tweets.length; i++) {
     console.log(`\n📝 Tweet ${i + 1}/${tweets.length}: Adding to thread...`);
 
-    // Find and click "Add to thread" button naturally
-    const addButtonFound = await page.evaluate(() => {
-      const btn = Array.from(document.querySelectorAll('span, div[role="button"]')).find(el =>
-        el.textContent.trim() === 'Add to thread'
-      );
-      return btn ? true : false;
-    });
-
-    if (!addButtonFound) {
-      console.log('   ⚠️ Could not find Add to thread button');
-      continue;
-    }
-
-    // Click using human behavior
+    // Find Add to thread button
     await page.evaluate(() => {
       const btn = Array.from(document.querySelectorAll('span, div[role="button"]')).find(el =>
         el.textContent.trim() === 'Add to thread'
@@ -510,116 +321,290 @@ async function postThread(wsEndpoint, shouldPost = false) {
     const btnRect = await page.evaluate(() => window.__addThreadBtnRect);
     if (btnRect) {
       await human.clickAtBox(btnRect);
+    } else {
+      console.log('   ⚠️ Could not find Add to thread button');
+      continue;
     }
 
     await page.waitForTimeout(human.delay('normal'));
 
-    // Occasional scroll behavior
     if (Math.random() < 0.3) {
       await human.randomScroll();
     }
 
-    // Wait for new editor and click it
-    await page.waitForTimeout(human.delay('short'));
-
-    // Get and click the last editor
+    // Click last editor
     const editors = await page.$$('div[contenteditable="true"][data-lexical-editor="true"]');
     const lastEditor = editors[editors.length - 1];
-
     if (lastEditor) {
       const box = await lastEditor.boundingBox();
-      if (box) {
-        await human.clickAtBox(box);
-      }
+      if (box) await human.clickAtBox(box);
     }
 
     await page.waitForTimeout(human.delay('short'));
-
-    // Type the tweet content
     await human.typeWithLineBreaks(tweets[i]);
-
     console.log(`✅ Tweet ${i + 1}/${tweets.length}: Done`);
-
-    // Human-like pause between tweets (reading back)
     await human.simulateReading(human.delay('thinking'));
   }
 
-  console.log('\n🎉 Thread composed successfully!');
+  console.log('\n🎉 Thread composed!');
+  return true;
+}
 
-  // Random movement before screenshot
-  await human.idleMovement();
+async function clickPostButton(page, human) {
+  console.log('\n🚀 Clicking Post button...');
 
-  // Take a screenshot
-  const screenshotPath = `/tmp/thread_preview_${Date.now()}.png`;
-  await page.screenshot({ path: screenshotPath, fullPage: true });
-  console.log(`📸 Screenshot saved: ${screenshotPath}`);
-
-  if (shouldPost) {
-    console.log('\n🚀 Posting thread...');
-
-    // Find the Post button and click it with real mouse interaction
-    const postButtonFound = await page.evaluate(() => {
-      const btn = Array.from(document.querySelectorAll('div[role="button"]')).find(el =>
-        el.textContent.trim() === 'Post'
-      );
-      if (btn) {
-        const rect = btn.getBoundingClientRect();
-        window.__postBtnRect = { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
-        return true;
-      }
-      return false;
-    });
-
-    if (postButtonFound) {
-      const postBtnRect = await page.evaluate(() => window.__postBtnRect);
-
-      // Move to button naturally
-      await human.moveMouse(
-        postBtnRect.x + postBtnRect.width / 2,
-        postBtnRect.y + postBtnRect.height / 2
-      );
-
-      // Pause (human hesitation before posting)
-      await page.waitForTimeout(human.delay('thinking'));
-
-      // Click with proper mouse events
-      await page.mouse.down();
-      await page.waitForTimeout(human.delay('micro'));
-      await page.mouse.up();
-
-      await page.waitForTimeout(human.delay('long'));
-      console.log('✅ Thread posted!');
-    } else {
-      console.log('⚠️ Post button not found. Thread ready for manual posting.');
+  const postButtonFound = await page.evaluate(() => {
+    const btn = Array.from(document.querySelectorAll('div[role="button"]')).find(el =>
+      el.textContent.trim() === 'Post'
+    );
+    if (btn) {
+      const rect = btn.getBoundingClientRect();
+      window.__postBtnRect = { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+      return true;
     }
-  } else {
-    console.log('\n⏸️  Thread ready but NOT posted (add --post flag to post)');
+    return false;
+  });
+
+  if (!postButtonFound) {
+    throw new Error('Post button not found');
   }
 
-  return { success: true, screenshotPath };
+  const postBtnRect = await page.evaluate(() => window.__postBtnRect);
+
+  await human.moveMouse(
+    postBtnRect.x + postBtnRect.width / 2,
+    postBtnRect.y + postBtnRect.height / 2
+  );
+
+  await page.waitForTimeout(human.delay('thinking'));
+
+  // Real mouse click
+  await page.mouse.down();
+  await page.waitForTimeout(human.delay('micro'));
+  await page.mouse.up();
+
+  await page.waitForTimeout(human.delay('long'));
+  console.log('✅ Post button clicked!');
+
+  // Wait for posting to complete
+  await page.waitForTimeout(5000);
 }
 
 // ============================================
-// MAIN EXECUTION
+// MAIN FUNCTIONS
+// ============================================
+
+async function runBatch(wsEndpoint, options = {}) {
+  const { maxThreads = 1, delayBetween = 60000, autoPost = false } = options;
+
+  ensureDirectories();
+
+  const pendingThreads = getPendingThreads();
+
+  if (pendingThreads.length === 0) {
+    console.log('\n📭 No pending threads found in:', CONFIG.threadsDir);
+    console.log('💡 Create .txt files with tweets separated by "---"');
+    return;
+  }
+
+  console.log(`\n📋 Found ${pendingThreads.length} pending thread(s)`);
+  const threadsToProcess = pendingThreads.slice(0, maxThreads);
+  console.log(`📝 Will process: ${threadsToProcess.length} thread(s)`);
+
+  // Connect to browser
+  console.log('\n🔗 Connecting to browser...');
+  const browser = await chromium.connectOverCDP(wsEndpoint);
+  const contexts = browser.contexts();
+  const context = contexts[0];
+  const pages = context.pages();
+  let page = pages.find(p => p.url().includes('threads.net')) || pages[0];
+  const human = new HumanBehavior(page);
+  console.log('✅ Connected to browser');
+
+  for (let i = 0; i < threadsToProcess.length; i++) {
+    const threadFile = threadsToProcess[i];
+    console.log(`\n${'='.repeat(50)}`);
+    console.log(`📌 Processing ${i + 1}/${threadsToProcess.length}: ${threadFile.name}`);
+    console.log('='.repeat(50));
+
+    try {
+      const tweets = loadThreadFromFile(threadFile.path);
+      await postSingleThread(page, human, tweets, threadFile.name);
+
+      // Screenshot
+      const screenshotPath = path.join(CONFIG.postedDir, `${Date.now()}_${threadFile.name}.png`);
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      console.log(`📸 Screenshot: ${screenshotPath}`);
+
+      if (autoPost) {
+        await clickPostButton(page, human);
+        markThreadAsPosted(threadFile);
+      } else {
+        console.log('\n⏸️  Thread ready - NOT posted (use --post flag)');
+        console.log('💡 Review and manually click Post, or re-run with --post');
+      }
+
+      // Delay between threads
+      if (i < threadsToProcess.length - 1) {
+        const waitTime = delayBetween + Math.random() * 30000;
+        console.log(`\n⏳ Waiting ${Math.round(waitTime / 1000)}s before next thread...`);
+        await page.waitForTimeout(waitTime);
+      }
+
+    } catch (error) {
+      console.error(`\n❌ Failed: ${error.message}`);
+      markThreadAsFailed(threadFile, error);
+    }
+  }
+
+  console.log('\n' + '='.repeat(50));
+  console.log('🏁 Batch complete!');
+  console.log('='.repeat(50));
+}
+
+async function createExampleThread() {
+  ensureDirectories();
+
+  const exampleContent = `Elon Musk just sued OpenAI for $134 billion.
+
+Everyone's calling him a sore loser.
+
+They're missing the real lesson.
+
+Here's why this case should terrify every founder:
+---
+In 2015, OpenAI launched as a non-profit.
+
+Elon gave them $38 million.
+
+He got a board seat in return.
+
+Seemed like a fair deal.
+
+It wasn't.
+---
+By 2018, Elon saw the potential.
+
+He offered MORE money for control.
+
+The board said no.
+
+He quit.
+
+Then they made billions without him.
+---
+The lesson:
+
+Mission evaporates when billions appear.
+
+Every. Single. Time.
+
+Protect yourself on paper.
+
+Or watch others get rich on your early work.
+---
+Want more insights like this?
+
+Follow me on IG @nurikadi for growth tips.`;
+
+  const examplePath = path.join(CONFIG.threadsDir, '001_example_thread.txt');
+  fs.writeFileSync(examplePath, exampleContent);
+  console.log(`✅ Created example thread: ${examplePath}`);
+  console.log('\n💡 Edit this file or create more .txt files in the threads/ folder');
+  console.log('   Use "---" to separate individual tweets in a thread');
+}
+
+// ============================================
+// CLI
 // ============================================
 
 async function main() {
-  const wsEndpoint = process.argv[2] || 'ws://127.0.0.1:59188/devtools/browser/8e47ebee-a29b-46e2-b85c-76864bf4319d';
-  const shouldPost = process.argv.includes('--post');
+  const args = process.argv.slice(2);
+  const command = args[0];
 
   console.log('='.repeat(50));
-  console.log('🧵 THREADS AUTO-POSTER (Stealth Mode)');
+  console.log('🧵 THREADS AUTO-POSTER (Batch Mode)');
   console.log('='.repeat(50));
-  console.log(`📊 Tweets to post: ${tweets.length}`);
+
+  // Help command
+  if (command === '--help' || command === '-h' || !command) {
+    console.log(`
+Usage:
+  node threads_post_script.js <websocket> [options]
+  node threads_post_script.js --init          Create example thread file
+  node threads_post_script.js --list          List pending threads
+
+Options:
+  --post          Actually post the thread(s)
+  --max=N         Process max N threads (default: 1)
+  --delay=MS      Delay between threads in ms (default: 60000)
+
+Examples:
+  # Initialize (create folders and example)
+  node threads_post_script.js --init
+
+  # Preview first pending thread
+  node threads_post_script.js "ws://127.0.0.1:PORT/devtools/browser/ID"
+
+  # Post first pending thread
+  node threads_post_script.js "ws://127.0.0.1:PORT/devtools/browser/ID" --post
+
+  # Post up to 5 threads with 2 min delay
+  node threads_post_script.js "ws://..." --post --max=5 --delay=120000
+
+Thread File Format (threads/*.txt):
+  First tweet content here.
+  Can have multiple lines.
+  ---
+  Second tweet in the thread.
+  ---
+  Third tweet, etc.
+  ---
+  Last tweet with CTA.
+
+Files are processed alphabetically. Use prefixes like 001_, 002_ for ordering.
+    `);
+    return;
+  }
+
+  // Init command
+  if (command === '--init') {
+    await createExampleThread();
+    return;
+  }
+
+  // List command
+  if (command === '--list') {
+    ensureDirectories();
+    const pending = getPendingThreads();
+    console.log(`\n📋 Pending threads (${pending.length}):`);
+    pending.forEach((t, i) => {
+      const tweets = loadThreadFromFile(t.path);
+      console.log(`   ${i + 1}. ${t.name} (${tweets.length} tweets)`);
+    });
+    return;
+  }
+
+  // Main posting flow
+  const wsEndpoint = command;
+  const autoPost = args.includes('--post');
+  const maxMatch = args.find(a => a.startsWith('--max='));
+  const delayMatch = args.find(a => a.startsWith('--delay='));
+
+  const options = {
+    autoPost,
+    maxThreads: maxMatch ? parseInt(maxMatch.split('=')[1]) : 1,
+    delayBetween: delayMatch ? parseInt(delayMatch.split('=')[1]) : 60000,
+  };
+
   console.log(`🔗 WebSocket: ${wsEndpoint.substring(0, 50)}...`);
-  console.log(`📤 Auto-post: ${shouldPost ? 'YES' : 'NO (preview only)'}`);
-  console.log(`🥷 Stealth: ENABLED`);
-  console.log(`🤖 Human simulation: ENABLED`);
+  console.log(`📤 Auto-post: ${options.autoPost ? 'YES' : 'NO (preview)'}`);
+  console.log(`📊 Max threads: ${options.maxThreads}`);
+  console.log(`⏱️  Delay between: ${options.delayBetween}ms`);
   console.log('='.repeat(50));
 
   try {
-    const result = await postThread(wsEndpoint, shouldPost);
-    console.log('\n✅ SUCCESS:', result);
+    await runBatch(wsEndpoint, options);
   } catch (error) {
     console.error('\n❌ ERROR:', error.message);
     console.error(error.stack);
