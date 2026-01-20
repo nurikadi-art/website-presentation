@@ -1,0 +1,732 @@
+[
+  {
+    "type": "gotoUrl",
+    "config": {
+      "url": "https://www.threads.net/intent/post",
+      "timeout": 30000,
+      "remark": "Open Threads composer"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 5000,
+      "timeoutMin": 3000,
+      "timeoutMax": 5000,
+      "remark": "Wait for page load"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click on editor"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1000,
+      "timeoutMin": 500,
+      "timeoutMax": 1000,
+      "remark": "Short pause"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "content": "AI just invented math that humans couldn't figure out in 50 years.\n\nNot copied.\n\nNot optimized.\n\nInvented from scratch.\n\nHere's why this changes everything for your business:",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 1 - Hook"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause after typing"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "text": "Add to thread",
+      "remark": "Click Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait for new editor"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 2,
+      "remark": "Click on second editor"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 2,
+      "content": "Google's AI created a new algorithm for matrix multiplication.\n\n14% more efficient than anything humans built.\n\nFor context:\n\nResearchers spent decades celebrating 2-3% gains.\n\nAI did 14% in minutes.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 2"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 3,
+      "remark": "Click editor 3"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 3,
+      "content": "Since the late 1960s, mathematicians worked on this problem.\n\nCareers spent on tiny improvements.\n\nThen AI showed up.\n\nAnd invented a solution nobody had ever seen.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 3"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 4,
+      "remark": "Click editor 4"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 4,
+      "content": "The old argument is dead.\n\n\"AI just copies from training data.\"\n\n\"It's fancy pattern matching.\"\n\n\"It can't really think.\"\n\nThis algorithm didn't exist anywhere.\n\nAI created it.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 4"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 5,
+      "remark": "Click editor 5"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 5,
+      "content": "Here's what most founders are getting wrong:\n\nThey're still debating WHETHER AI can think.\n\nMeanwhile, competitors are using it to solve problems that used to need PhD teams and 6 months of R&D.\n\nThe debate is over.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 5"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 6,
+      "remark": "Click editor 6"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 6,
+      "content": "The real threat isn't AI.\n\nIt's the gurus selling you \"timeless fundamentals\" while the game board gets flipped.\n\nSkills that took you 10 years to build?\n\nDepreciating faster than a new car.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 6"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 7,
+      "remark": "Click editor 7"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 7,
+      "content": "What smart founders are doing right now:\n\nUsing AI to analyze markets in hours, not weeks\n\nBuilding MVPs in days instead of months\n\nTesting 50 ideas while competitors test 2\n\nThey're not waiting for permission.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 7"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 8,
+      "remark": "Click editor 8"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 8,
+      "content": "Your competition isn't other humans anymore.\n\nIt's humans using tools you don't understand yet.\n\nA 22-year-old with ChatGPT can now outperform a 45-year-old expert who refuses to adapt.\n\nThat's the new reality.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 8"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 9,
+      "remark": "Click editor 9"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 9,
+      "content": "The mindset shift that wins:\n\nStop asking \"Is AI really intelligent?\"\n\nStart asking \"What becomes possible if I assume it is?\"\n\nThat one question changes every decision you make.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 9"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 10,
+      "remark": "Click editor 10"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 10,
+      "content": "Here's your move:\n\nPick one bottleneck in your business this week\n\nSpend 2 hours testing AI solutions for it\n\nDocument what works\n\nDon't overthink it.\n\nJust start.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 10"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 11,
+      "remark": "Click editor 11"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 11,
+      "content": "The entrepreneurs who win the next 5 years aren't the smartest.\n\nThey're the ones who stopped treating AI like a calculator.\n\nAnd started treating it like a co-founder who works 24/7.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 11"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 12,
+      "remark": "Click editor 12"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 12,
+      "content": "Two paths forward:\n\nBecome the person using exponential tools.\n\nOr become the case study of what happens when you don't.\n\nYour move.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 12"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 2000,
+      "timeoutMin": 1500,
+      "timeoutMax": 2500,
+      "remark": "Pause"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "span",
+      "selectorType": "selector",
+      "text": "Add to thread",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Add to thread"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 1500,
+      "timeoutMin": 1000,
+      "timeoutMax": 2000,
+      "remark": "Wait"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 13,
+      "remark": "Click editor 13"
+    }
+  },
+  {
+    "type": "inputContent",
+    "config": {
+      "selector": "div[contenteditable='true'][data-lexical-editor='true']",
+      "selectorType": "selector",
+      "serialType": "fixedValue",
+      "serial": 13,
+      "content": "Want more insights like this?\n\nFollow me on IG @nurikadi for growth tips.",
+      "intervals": 80,
+      "isRandom": "1",
+      "remark": "Tweet 13 - CTA"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 3000,
+      "timeoutMin": 2000,
+      "timeoutMax": 4000,
+      "remark": "Final pause before posting"
+    }
+  },
+  {
+    "type": "click",
+    "config": {
+      "selector": "div[role='button']",
+      "selectorType": "selector",
+      "text": "Post",
+      "serialType": "fixedValue",
+      "serial": 1,
+      "remark": "Click Post button"
+    }
+  },
+  {
+    "type": "waitTime",
+    "config": {
+      "timeoutType": "randomInterval",
+      "timeout": 5000,
+      "timeoutMin": 4000,
+      "timeoutMax": 6000,
+      "remark": "Wait for post to complete"
+    }
+  }
+]
